@@ -3,10 +3,10 @@
 import { createScreen } from "./core/screen.js";
 import { createRenderer } from "./core/renderer.js";
 import { createGame } from "./core/game.js";
-import { rotatePoint } from "./math/vector2.js";
 import { rotateX, rotateY, rotateZ } from "./math/vector3.js";
 import { projectPoint } from "./math/projection.js";
 import { createInput } from "./core/input.js";
+import { createShip3D, shipModel3D } from "./objects/ship3d.js";
 
 const screen = createScreen("screen");
 const renderer = createRenderer(screen);
@@ -58,42 +58,7 @@ const ship = {
   velocityY: 0,
 };
 
-let angleX = 0;
-let angleY = 0;
-let angleZ = 0;
-
-// Estado 3D de la nave (para pruebas con pirámide)
-const ship3D = {
-  x: 0,
-  y: 0,
-  z: 200,
-
-  rotX: 0,
-  rotY: 0,
-  rotZ: 0,
-
-  velocityX: 0,
-  velocityY: 0,
-  velocityZ: 0,
-};
-
-// Modelo 3D de pirámide (para prueba de proyección)
-const pyramidModel3D = {
-  points: [
-    { x: 0, y: -60, z: 0 }, // punta superior
-    { x: -50, y: 40, z: -50 }, // base izquierda cercana
-    { x: 50, y: 40, z: -50 }, // base derecha cercana
-    { x: 0, y: 40, z: 50 }, // base trasera
-  ],
-  edges: [
-    [0, 1],
-    [0, 2],
-    [0, 3],
-    [1, 2],
-    [2, 3],
-    [3, 1],
-  ],
-};
+const ship3D = createShip3D();
 
 /**
  * Updates ship state based on keyboard input.
@@ -293,7 +258,7 @@ function render() {
     renderer.drawPoint(projected.x, projected.y, size);
   }
 
-  const projectedPoints = pyramidModel3D.points.map((point) => {
+  const projectedPoints = shipModel3D.points.map((point) => {
     // Rotación usando el estado de la nave
     const rY = rotateY(point, ship3D.rotY);
     const rX = rotateX(rY, ship3D.rotX);
@@ -314,7 +279,7 @@ function render() {
     );
   });
 
-  renderer.drawWireframe(projectedPoints, pyramidModel3D.edges);
+  renderer.drawWireframe(projectedPoints, shipModel3D.edges);
 }
 
 const game = createGame(update, render);
