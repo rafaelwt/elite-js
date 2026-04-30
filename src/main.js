@@ -234,9 +234,9 @@ function render() {
     }
 
     const projectedPoints = pyramidModel3D.points.map((point) => {
-        const rY = rotateY(point, angleY);
-        const rX = rotateX(rY, angleX);
-        const rZ = rotateZ(rX, angleZ);
+        const rX = rotateX(point, angleX);
+        const rY = rotateY(rX, angleY);
+        const rZ = rotateZ(rY, angleZ);
 
         return projectPoint(
             rZ,
