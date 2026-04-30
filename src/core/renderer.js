@@ -61,9 +61,9 @@ export function createRenderer(screen) {
    * @param {number} y - Vertical coordinate in pixels.
    * @returns {void}
    */
-  function drawPoint(x, y) {
+  function drawPoint(x, y, size = 2) {
     ctx.fillStyle = "white";
-    ctx.fillRect(x, y, 2, 2);
+    ctx.fillRect(x, y, size, size);
   }
 
   return {

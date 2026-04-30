@@ -19,12 +19,18 @@ const input = createInput();
 // - Las estrellas son fijas (no se mueven) para dar sensación de profundidad
 // - El número define la densidad del campo de estrellas
 const stars = [];
-const STAR_COUNT = 100;
+
+const STAR_COUNT = 150;
 
 for (let i = 0; i < STAR_COUNT; i++) {
     stars.push({
         x: Math.random() * screen.width(),
         y: Math.random() * screen.height(),
+
+        // Profundidad falsa.
+        // Valores bajos parecen más cercanos.
+        // Valores altos parecen más lejanos.
+        depth: 0.5 + Math.random() * 2.5,
     });
 }
 
@@ -144,10 +150,17 @@ function update(deltaTime) {
      */
 
     for (const star of stars) {
-        star.x -= ship.velocityX * deltaTime;
-        star.y -= ship.velocityY * deltaTime;
+        /**
+         * Profundidad simple:
+         *
+         * Una estrella cercana debe moverse más rápido.
+         * Una estrella lejana debe moverse más lento.
+         *
+         * Por eso dividimos la velocidad entre depth.
+         */
+        star.x -= (ship.velocityX / star.depth) * deltaTime;
+        star.y -= (ship.velocityY / star.depth) * deltaTime;
 
-        // Reposicionar estrellas si salen de pantalla
         if (star.x < 0) star.x = screen.width();
         if (star.x > screen.width()) star.x = 0;
 
@@ -175,7 +188,9 @@ function render() {
      */
 
     for (const star of stars) {
-        renderer.drawPoint(star.x, star.y);
+        const size = 3 / star.depth;
+
+        renderer.drawPoint(star.x, star.y, size);
     }
 
     const transformedPoints = shipModel.points.map((point) => {
