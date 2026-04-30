@@ -8,6 +8,7 @@ import { createShip3D } from "./objects/ship3d.js";
 import { createStarfield } from "./objects/starfield.js";
 import { createCamera3D } from "./core/camera.js";
 import { createEnemyShip3D } from "./objects/enemyShip3d.js";
+import { createTargetingSystem } from "./systems/targetingSystem.js";
 
 const screen = createScreen("screen");
 const renderer = createRenderer(screen);
@@ -16,6 +17,7 @@ const input = createInput();
 const ship3D = createShip3D(screen);
 const starfield = createStarfield(screen);
 const camera = createCamera3D();
+const targeting = createTargetingSystem(screen);
 
 // Crear naves enemigas
 const enemies = [];
@@ -23,6 +25,8 @@ const enemies = [];
 for (let i = 0; i < 8; i++) {
   enemies.push(createEnemyShip3D(screen));
 }
+
+let bestTarget = null;
 
 function update(deltaTime) {
   ship3D.update(input, deltaTime);
@@ -32,6 +36,8 @@ function update(deltaTime) {
   for (const enemy of enemies) {
     enemy.update(deltaTime, camera);
   }
+
+  bestTarget = targeting.update(input, enemies, camera);
 }
 
 function render() {
@@ -57,32 +63,8 @@ function render() {
   // Nave siempre al final (HUD / jugador)
   ship3D.render(renderer);
 
-  // Targeting: buscar nave más cercana al centro
-  let target = null;
-  let bestDistance = Infinity;
-
-  const centerX = screen.width() / 2;
-  const centerY = screen.height() / 2;
-
-  for (const enemy of enemies) {
-    const pos = enemy.getScreenPosition(camera);
-
-    if (!pos) continue;
-
-    const dx = pos.x - centerX;
-    const dy = pos.y - centerY;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    if (distance < bestDistance) {
-      bestDistance = distance;
-      target = pos;
-    }
-  }
-
-  if (target) {
-    renderer.drawRect(target.x - 25, target.y - 25, 50, 50);
-    renderer.drawText("TARGET", target.x + 30, target.y - 30);
-  }
+  // Targeting
+  targeting.render(renderer, camera, bestTarget);
 }
 
 const game = createGame(update, render);
