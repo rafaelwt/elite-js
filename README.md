@@ -67,8 +67,7 @@ elite-js/
 |-------|--------|
 | `←` | Rotar nave a la izquierda |
 | `→` | Rotar nave a la derecha |
-
-*(Próximamente: aceleración, vuelo libre)*
+| `↑` | Acelerar |
 
 ## 📚 Roadmap de desarrollo
 
