@@ -21,8 +21,17 @@ export function createCamera3D() {
     };
   }
 
+  function worldToCamera(point) {
+    return {
+      x: point.x - state.x,
+      y: point.y - state.y,
+      z: point.z - state.z,
+    };
+  }
+
   return {
     update,
     getPosition,
+    worldToCamera,
   };
 }

@@ -7,6 +7,7 @@ import { createInput } from "./core/input.js";
 import { createShip3D } from "./objects/ship3d.js";
 import { createStarfield } from "./objects/starfield.js";
 import { createCamera3D } from "./core/camera.js";
+import { createEnemyShip3D } from "./objects/enemyShip3d.js";
 
 const screen = createScreen("screen");
 const renderer = createRenderer(screen);
@@ -16,15 +17,44 @@ const ship3D = createShip3D(screen);
 const starfield = createStarfield(screen);
 const camera = createCamera3D();
 
+// Crear naves enemigas
+const enemies = [];
+
+for (let i = 0; i < 8; i++) {
+  enemies.push(createEnemyShip3D(screen));
+}
+
 function update(deltaTime) {
   ship3D.update(input, deltaTime);
   camera.update(deltaTime, ship3D.getVelocity());
   starfield.update(deltaTime, ship3D.getVelocity());
+
+  for (const enemy of enemies) {
+    enemy.update(deltaTime, camera);
+  }
 }
 
 function render() {
   renderer.clear();
   starfield.render(renderer);
+
+  // Painter's Algorithm: ordenar por profundidad (más lejos primero)
+  const renderQueue = [];
+
+  for (const enemy of enemies) {
+    renderQueue.push({
+      obj: enemy,
+      depth: enemy.getDepth(camera),
+    });
+  }
+
+  renderQueue.sort((a, b) => b.depth - a.depth);
+
+  for (const item of renderQueue) {
+    item.obj.render(renderer, camera);
+  }
+
+  // Nave siempre al final (HUD / jugador)
   ship3D.render(renderer);
 }
 

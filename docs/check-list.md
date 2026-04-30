@@ -29,66 +29,78 @@
 
 ---
 
-## 🧠 Conceptos ya dominados
-
-- [x] Puntos (vértices)
-- [x] Aristas (edges)
-- [x] Wireframe
-- [x] Transformaciones (traslación, rotación)
-- [x] Separación de responsabilidades
-- [x] Uso de `deltaTime`
-- [x] Game loop
-
----
-
-# 🚀 Lo que sigue (próximos pasos)
-
 ## 🚀 Fase 2 (continuación) — Movimiento real tipo nave
 
-- [ ] Calcular dirección de la nave (vector forward)
-- [ ] Implementar aceleración hacia adelante
-- [ ] Agregar inercia (la nave no se detiene sola)
-- [ ] Combinar rotación + movimiento
-- [ ] (Opcional) agregar fricción leve para control
+- [x] Calcular dirección de la nave (vector forward)
+- [x] Implementar aceleración hacia adelante
+- [x] Agregar inercia
+- [x] Combinar rotación + movimiento
+- [x] Agregar fricción leve
 
 ---
 
 ## 🌌 Fase 3 — Espacio
 
-- [ ] Crear estrellas aleatorias
-- [ ] Renderizar estrellas
-- [ ] Mover estrellas en sentido contrario
-- [ ] Mantener nave centrada (cámara básica)
+- [x] Crear estrellas aleatorias
+- [x] Renderizar estrellas
+- [x] Mover estrellas con profundidad simple
+- [x] Crear starfield 3D con `z`
+- [x] Mantener nave estable visualmente
+- [x] Crear cámara lógica básica
+- [x] Movimiento relativo usando velocidad de la nave
 
 ---
 
-## 🧠 Fase 4 — Matemática
+## 🧊 Fase 5 — 3D CORE
 
-- [ ] Crear utilidades de vectores 2D
-- [ ] Implementar normalización
-- [ ] Calcular dirección basada en ángulo
-- [ ] Entender magnitud y dirección
-
----
-
-## 🧊 Fase 5 — 3D (CORE)
-
-- [ ] Crear estructura de puntos 3D (x, y, z)
-- [ ] Rotación en eje Z (ya casi listo)
-- [ ] Rotación en eje X
-- [ ] Rotación en eje Y
-- [ ] Implementar proyección 3D → 2D
-- [ ] Dibujar wireframe 3D
+- [x] Crear estructura de puntos 3D `(x, y, z)`
+- [x] Implementar proyección 3D → 2D
+- [x] Dibujar wireframe 3D
+- [x] Rotación en eje Y
+- [x] Rotación en eje X
+- [x] Rotación en eje Z
+- [x] Entender que el orden de rotaciones importa
+- [x] Separar modelo 3D de estado de nave
+- [x] Crear nave wireframe simple estilo Elite
+- [x] Crear objeto 3D externo en el mundo
+- [x] Implementar clipping básico `near plane`
+- [x] Reciclar objeto cuando pasa la cámara
 
 ---
 
-## 🌍 Fase 6 — Procedural (CORE)
+## Arquitectura lograda
+
+### Core
+- [x] `screen.js` — acceso a canvas y dimensiones
+- [x] `renderer.js` — primitivas de dibujo
+- [x] `game.js` — game loop con deltaTime
+- [x] `input.js` — tracking de teclado con `event.code` + `preventDefault`
+- [x] `camera.js` — posición lógica + `worldToCamera()`
+
+### Objetos
+- [x] `ship3d.js` — nave con orientación, velocidad, update/render autocontenidos
+- [x] `starfield.js` — estrellas 3D con reciclaje
+- [x] `testObject3d.js` — cubo wireframe en el mundo con clipping y reciclaje
+
+### Math
+- [x] `vector2.js` — `rotatePoint()`
+- [x] `vector3.js` — `rotateX()`, `rotateY()`, `rotateZ()`
+- [x] `projection.js` — `projectPoint()` perspectiva simple
+
+---
+
+## En progreso ahora
+
+- [ ] Ordenar render por profundidad
+- [ ] Crear varios objetos 3D en el mundo
+- [ ] Mejorar sistema de cámaras/mundo
+
+---
+
+## 🌍 Fase 6 — Procedural (futuro)
 
 - [ ] Crear sistema de semilla
 - [ ] Generar sistemas estelares
-- [ ] Generar nombres
+- [ ] Generar nombres procedurales
 - [ ] Generar propiedades (economía, gobierno, etc.)
 - [ ] Generar descripciones textuales
-
----
-
