@@ -119,10 +119,41 @@ function update(deltaTime) {
      * Tema: cinemática básica
      *
      * posición = posición + velocidad * tiempo
+     *
+     * NOTA: La nave se mantiene fija en el centro.
+     * Solo las estrellas se mueven (movimiento relativo).
      */
 
-    ship.x += ship.velocityX * deltaTime;
-    ship.y += ship.velocityY * deltaTime;
+    // ship.x += ship.velocityX * deltaTime;
+    // ship.y += ship.velocityY * deltaTime;
+
+    /**
+     * Movimiento relativo de estrellas
+     *
+     * Tema: referencia de sistemas (cámara vs mundo)
+     *
+     * En vez de mover la nave, movemos el mundo (estrellas)
+     * en sentido contrario a la velocidad.
+     *
+     * Esto crea la ilusión de desplazamiento en el espacio.
+     * Visualmente: si la nave avanza hacia arriba, las estrellas
+     * parecen caer hacia abajo.
+     *
+     * También se repositionan las estrellas que salen de pantalla
+     * para que aparezcan por el otro lado (efecto de "wrap").
+     */
+
+    for (const star of stars) {
+        star.x -= ship.velocityX * deltaTime;
+        star.y -= ship.velocityY * deltaTime;
+
+        // Reposicionar estrellas si salen de pantalla
+        if (star.x < 0) star.x = screen.width();
+        if (star.x > screen.width()) star.x = 0;
+
+        if (star.y < 0) star.y = screen.height();
+        if (star.y > screen.height()) star.y = 0;
+    }
 }
 
 /**
