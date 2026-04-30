@@ -9,11 +9,15 @@ export function createInput() {
   const keys = new Set();
 
   window.addEventListener("keydown", (event) => {
-    keys.add(event.key);
+    event.preventDefault();
+
+    keys.add(event.code);
   });
 
   window.addEventListener("keyup", (event) => {
-    keys.delete(event.key);
+    event.preventDefault();
+
+    keys.delete(event.code);
   });
 
   /**

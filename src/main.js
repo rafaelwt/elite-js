@@ -71,6 +71,10 @@ const ship3D = {
   rotX: 0,
   rotY: 0,
   rotZ: 0,
+
+  velocityX: 0,
+  velocityY: 0,
+  velocityZ: 0,
 };
 
 // Modelo 3D de pirámide (para prueba de proyección)
@@ -224,6 +228,38 @@ function update(deltaTime) {
   if (input.isPressed("ArrowDown")) {
     ship3D.rotX += rotationSpeed3D * deltaTime;
   }
+
+  // THRUST 3D
+  const thrust3D = 120;
+  const friction3D = 0.98;
+
+  if (input.isPressed("KeyW")) {
+    /**
+     * Movimiento hacia adelante en 3D.
+     *
+     * Tema: vectores 3D + trigonometría
+     *
+     * rotY controla izquierda/derecha.
+     * rotX controla arriba/abajo.
+     *
+     * Calculamos una dirección aproximada hacia donde apunta la nave.
+     */
+    const forwardX = Math.sin(ship3D.rotY);
+    const forwardY = -Math.sin(ship3D.rotX);
+    const forwardZ = -Math.cos(ship3D.rotY) * Math.cos(ship3D.rotX);
+
+    ship3D.velocityX += forwardX * thrust3D * deltaTime;
+    ship3D.velocityY += forwardY * thrust3D * deltaTime;
+    ship3D.velocityZ += forwardZ * thrust3D * deltaTime;
+  }
+
+  ship3D.velocityX *= friction3D;
+  ship3D.velocityY *= friction3D;
+  ship3D.velocityZ *= friction3D;
+
+  ship3D.x += ship3D.velocityX * deltaTime;
+  ship3D.y += ship3D.velocityY * deltaTime;
+  ship3D.z += ship3D.velocityZ * deltaTime;
 }
 
 /**
