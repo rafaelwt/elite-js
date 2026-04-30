@@ -37,3 +37,22 @@ export function rotateX(point, angle) {
     z: point.y * sin + point.z * cos,
   };
 }
+
+export function rotateZ(point, angle) {
+  /**
+   * Rotación alrededor del eje Z.
+   *
+   * Tema: trigonometría 3D
+   *
+   * El eje Z queda fijo.
+   * Cambian X y Y (equivalente a rotación 2D).
+   */
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
+
+  return {
+    x: point.x * cos - point.y * sin,
+    y: point.x * sin + point.y * cos,
+    z: point.z,
+  };
+}

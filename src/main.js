@@ -4,7 +4,7 @@ import { createScreen } from "./core/screen.js";
 import { createRenderer } from "./core/renderer.js";
 import { createGame } from "./core/game.js";
 import { rotatePoint } from "./math/vector2.js";
-import { rotateX, rotateY } from "./math/vector3.js";
+import { rotateX, rotateY, rotateZ } from "./math/vector3.js";
 import { projectPoint } from "./math/projection.js";
 import { createInput } from "./core/input.js";
 
@@ -57,7 +57,9 @@ const ship = {
     velocityY: 0,
 };
 
-let angle3D = 0;
+let angleX = 0;
+let angleY = 0;
+let angleZ = 0;
 
 // Modelo 3D de pirámide (para prueba de proyección)
 const pyramidModel3D = {
@@ -191,7 +193,9 @@ function update(deltaTime) {
     }
 
     // Rotación 3D de la pirámide
-    angle3D += 1 * deltaTime;
+    angleX += 0.7 * deltaTime;
+    angleY += 1.0 * deltaTime;
+    angleZ += 0.5 * deltaTime;
 }
 
 /**
@@ -219,11 +223,12 @@ function render() {
     }
 
     const projectedPoints = pyramidModel3D.points.map((point) => {
-        const rotatedY = rotateY(point, angle3D);
-        const rotatedX = rotateX(rotatedY, angle3D * 0.7);
+        const rY = rotateY(point, angleY);
+        const rX = rotateX(rY, angleX);
+        const rZ = rotateZ(rX, angleZ);
 
         return projectPoint(
-            rotatedX,
+            rZ,
             screen.width() / 2,
             screen.height() / 2,
             300
