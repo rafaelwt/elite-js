@@ -15,8 +15,8 @@ const ship3D = createShip3D(screen);
 const starfield = createStarfield(screen);
 
 function update(deltaTime) {
-  starfield.update(deltaTime);
   ship3D.update(input, deltaTime);
+  starfield.update(deltaTime, ship3D.getVelocity());
 }
 
 function render() {

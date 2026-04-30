@@ -93,5 +93,13 @@ export function createShip3D(screen) {
   return {
     update,
     render,
+
+    getVelocity() {
+      return {
+        x: state.velocityX,
+        y: state.velocityY,
+        z: state.velocityZ,
+      };
+    },
   };
 }
