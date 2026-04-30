@@ -4,7 +4,7 @@ import { createScreen } from "./core/screen.js";
 import { createRenderer } from "./core/renderer.js";
 import { createGame } from "./core/game.js";
 import { rotatePoint } from "./math/vector2.js";
-import { rotateY } from "./math/vector3.js";
+import { rotateX, rotateY } from "./math/vector3.js";
 import { projectPoint } from "./math/projection.js";
 import { createInput } from "./core/input.js";
 
@@ -219,10 +219,11 @@ function render() {
     }
 
     const projectedPoints = pyramidModel3D.points.map((point) => {
-        const rotated = rotateY(point, angle3D);
+        const rotatedY = rotateY(point, angle3D);
+        const rotatedX = rotateX(rotatedY, angle3D * 0.7);
 
         return projectPoint(
-            rotated,
+            rotatedX,
             screen.width() / 2,
             screen.height() / 2,
             300
