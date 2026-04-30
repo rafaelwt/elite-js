@@ -4,9 +4,13 @@ description: Create a git commit with semantic format
 
 # Commit Command
 
-## Allowed Commands (ONLY these)
-1. `git add .`
-2. `git commit -m "<message>"`
+## Allowed Commands
+1. `git status --short`
+2. `git diff --staged`
+3. `git diff`
+4. `git log --oneline -5`
+5. `git add .`
+6. `git commit -m "<message>"`
 
 ## Special Rule for .claude/settings.local.json
 If `.claude/settings.local.json` was modified during the process and is not staged after `git add .`, run `git add .` again before committing to ensure it's included.
@@ -14,8 +18,8 @@ If `.claude/settings.local.json` was modified during the process and is not stag
 ## Forbidden
 - Do not run `find`, `dir`, `ls`, or any file exploration commands
 - Do not run `cd` to other directories
-- Do not check file contents or project structure
-- Do not run any command other than `git add` and `git commit`
+- Do not check project structure outside the allowed Git commands
+- Do not run commands other than the allowed Git commands above
 - Do not run `git push`
 - Do not use `--no-verify`
 - Do not amend commits
@@ -56,4 +60,5 @@ feat, fix, docs, style, refactor, perf, test, chore
 4. Body bullets must start with a past tense verb (Added, Updated, Fixed, Refactored)
 5. Be specific when context allows it
 6. Do not invent changes that were not provided in the context
-7. If there is not enough context, ask for a summary before committing
+7. Inspect staged and unstaged changes with the allowed Git commands before committing
+8. If there is still not enough context after inspection, ask for a summary before committing

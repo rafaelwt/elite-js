@@ -24,7 +24,15 @@ El proyecto recrea las mecánicas originales paso a paso — renderizado wirefra
 - **Sistemas procedurales** para generación de contenido
 - **Código modular y documentado** para facilitar el aprendizaje
 
-## 🚀 Inicio rápido
+## 🚀 Demo online
+
+Puedes probar el proyecto directamente en tu navegador sin instalar nada:
+
+**[🚀 Abrir Elite JS](https://elite-js.netlify.app/)**
+
+No requiere instalación ni dependencias.
+
+## 💻 Desarrollo local
 
 ```bash
 # Clonar el repositorio
@@ -34,8 +42,6 @@ cd elite-js
 # Abrir en el navegador
 open index.html
 ```
-
-No requiere instalación ni dependencias.
 
 ## 📂 Estructura del proyecto
 
