@@ -205,15 +205,25 @@ function update(deltaTime) {
     }
   }
 
-  // Rotación 3D de la pirámide
-  // angleX += 0.7 * deltaTime;
-  // angleY += 1.0 * deltaTime;
-  // angleZ += 0.5 * deltaTime;
+  const rotationSpeed3D = 2;
 
-  // Rotación 3D de la pirámide
-  ship3D.rotX += 0.7 * deltaTime;
-  ship3D.rotY += 1.0 * deltaTime;
-  ship3D.rotZ += 0.5 * deltaTime;
+  // YAW (izquierda / derecha)
+  if (input.isPressed("ArrowLeft")) {
+    ship3D.rotY -= rotationSpeed3D * deltaTime;
+  }
+
+  if (input.isPressed("ArrowRight")) {
+    ship3D.rotY += rotationSpeed3D * deltaTime;
+  }
+
+  // PITCH (arriba / abajo)
+  if (input.isPressed("ArrowUp")) {
+    ship3D.rotX -= rotationSpeed3D * deltaTime;
+  }
+
+  if (input.isPressed("ArrowDown")) {
+    ship3D.rotX += rotationSpeed3D * deltaTime;
+  }
 }
 
 /**
