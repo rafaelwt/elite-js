@@ -1,7 +1,10 @@
 // src/objects/ship3d.js
 
-export function createShip3D() {
-  return {
+import { rotateX, rotateY, rotateZ } from "../math/vector3.js";
+import { projectPoint } from "../math/projection.js";
+
+export function createShip3D(screen) {
+  const state = {
     x: 0,
     y: 0,
     z: 200,
@@ -14,36 +17,81 @@ export function createShip3D() {
     velocityY: 0,
     velocityZ: 0,
   };
+
+  const model = {
+    points: [
+      { x: 0, y: 0, z: -80 },
+      { x: -55, y: 20, z: 40 },
+      { x: 55, y: 20, z: 40 },
+      { x: 0, y: -25, z: 30 },
+      { x: 0, y: 35, z: 45 },
+      { x: -25, y: 15, z: 70 },
+      { x: 25, y: 15, z: 70 },
+    ],
+    edges: [
+      [0, 1], [0, 2], [0, 3], [0, 4],
+      [1, 3], [2, 3], [1, 4], [2, 4],
+      [1, 5], [2, 6], [5, 6],
+      [3, 5], [3, 6], [4, 5], [4, 6],
+    ],
+  };
+
+  function update(input, deltaTime) {
+    const rotationSpeed = 2;
+    const thrust = 120;
+    const friction = 0.98;
+
+    // Rotación
+    if (input.isPressed("ArrowLeft")) state.rotY -= rotationSpeed * deltaTime;
+    if (input.isPressed("ArrowRight")) state.rotY += rotationSpeed * deltaTime;
+    if (input.isPressed("ArrowUp")) state.rotX -= rotationSpeed * deltaTime;
+    if (input.isPressed("ArrowDown")) state.rotX += rotationSpeed * deltaTime;
+
+    // Movimiento (W)
+    if (input.isPressed("KeyW")) {
+      const forwardX = Math.sin(state.rotY);
+      const forwardY = -Math.sin(state.rotX);
+      const forwardZ = -Math.cos(state.rotY) * Math.cos(state.rotX);
+
+      state.velocityX += forwardX * thrust * deltaTime;
+      state.velocityY += forwardY * thrust * deltaTime;
+      state.velocityZ += forwardZ * thrust * deltaTime;
+    }
+
+    state.velocityX *= friction;
+    state.velocityY *= friction;
+    state.velocityZ *= friction;
+
+    state.x += state.velocityX * deltaTime;
+    state.y += state.velocityY * deltaTime;
+    state.z += state.velocityZ * deltaTime;
+  }
+
+  function render(renderer) {
+    const projectedPoints = model.points.map((point) => {
+      const rY = rotateY(point, state.rotY);
+      const rX = rotateX(rY, state.rotX);
+      const rZ = rotateZ(rX, state.rotZ);
+
+      const translated = {
+        x: rZ.x + state.x,
+        y: rZ.y + state.y,
+        z: rZ.z + state.z,
+      };
+
+      return projectPoint(
+        translated,
+        screen.width() / 2,
+        screen.height() / 2,
+        300
+      );
+    });
+
+    renderer.drawWireframe(projectedPoints, model.edges);
+  }
+
+  return {
+    update,
+    render,
+  };
 }
-
-export const shipModel3D = {
-  points: [
-    { x: 0, y: 0, z: -80 }, // 0 punta frontal
-    { x: -55, y: 20, z: 40 }, // 1 ala izquierda
-    { x: 55, y: 20, z: 40 }, // 2 ala derecha
-    { x: 0, y: -25, z: 30 }, // 3 parte superior
-    { x: 0, y: 35, z: 45 }, // 4 parte inferior
-    { x: -25, y: 15, z: 70 }, // 5 cola izquierda
-    { x: 25, y: 15, z: 70 }, // 6 cola derecha
-  ],
-
-  edges: [
-    [0, 1],
-    [0, 2],
-    [0, 3],
-    [0, 4],
-
-    [1, 3],
-    [2, 3],
-    [1, 4],
-    [2, 4],
-
-    [1, 5],
-    [2, 6],
-    [5, 6],
-    [3, 5],
-    [3, 6],
-    [4, 5],
-    [4, 6],
-  ],
-};
