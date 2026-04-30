@@ -56,6 +56,33 @@ function render() {
 
   // Nave siempre al final (HUD / jugador)
   ship3D.render(renderer);
+
+  // Targeting: buscar nave más cercana al centro
+  let target = null;
+  let bestDistance = Infinity;
+
+  const centerX = screen.width() / 2;
+  const centerY = screen.height() / 2;
+
+  for (const enemy of enemies) {
+    const pos = enemy.getScreenPosition(camera);
+
+    if (!pos) continue;
+
+    const dx = pos.x - centerX;
+    const dy = pos.y - centerY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      target = pos;
+    }
+  }
+
+  if (target) {
+    renderer.drawRect(target.x - 25, target.y - 25, 50, 50);
+    renderer.drawText("TARGET", target.x + 30, target.y - 30);
+  }
 }
 
 const game = createGame(update, render);

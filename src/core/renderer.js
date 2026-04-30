@@ -66,10 +66,29 @@ export function createRenderer(screen) {
     ctx.fillRect(x, y, size, size);
   }
 
+  function drawPoint(x, y, size = 2) {
+    ctx.fillStyle = "white";
+    ctx.fillRect(x, y, size, size);
+  }
+
+  function drawRect(x, y, width, height) {
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x, y, width, height);
+  }
+
+  function drawText(text, x, y) {
+    ctx.fillStyle = "white";
+    ctx.font = "14px monospace";
+    ctx.fillText(text, x, y);
+  }
+
   return {
     clear,
     drawLine,
     drawWireframe,
     drawPoint,
+    drawRect,
+    drawText,
   };
 }
