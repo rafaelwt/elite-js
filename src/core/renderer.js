@@ -54,9 +54,22 @@ export function createRenderer(screen) {
     }
   }
 
+  /**
+   * Draws a single white pixel at the given coordinates.
+   *
+   * @param {number} x - Horizontal coordinate in pixels.
+   * @param {number} y - Vertical coordinate in pixels.
+   * @returns {void}
+   */
+  function drawPoint(x, y) {
+    ctx.fillStyle = "white";
+    ctx.fillRect(x, y, 2, 2);
+  }
+
   return {
     clear,
     drawLine,
     drawWireframe,
+    drawPoint,
   };
 }
