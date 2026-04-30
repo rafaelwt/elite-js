@@ -62,9 +62,11 @@ export function createShip3D(screen) {
     state.velocityY *= friction;
     state.velocityZ *= friction;
 
-    state.x += state.velocityX * deltaTime;
-    state.y += state.velocityY * deltaTime;
-    state.z += state.velocityZ * deltaTime;
+    // La nave NO se traduce visualmente hacia la cámara.
+    // Su velocidad representa movimiento lógico para mover el mundo/cámara.
+    state.x = 0;
+    state.y = 0;
+    state.z = 200;
   }
 
   function render(renderer) {
