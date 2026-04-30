@@ -22,18 +22,19 @@ const input = createInput();
 // - El número define la densidad del campo de estrellas
 const stars = [];
 
-const STAR_COUNT = 150;
+const STAR_COUNT = 200;
+const STAR_DEPTH = 800;
+
+function createStar() {
+    return {
+        x: (Math.random() - 0.5) * screen.width(),
+        y: (Math.random() - 0.5) * screen.height(),
+        z: Math.random() * STAR_DEPTH + 1,
+    };
+}
 
 for (let i = 0; i < STAR_COUNT; i++) {
-    stars.push({
-        x: Math.random() * screen.width(),
-        y: Math.random() * screen.height(),
-
-        // Profundidad falsa.
-        // Valores bajos parecen más cercanos.
-        // Valores altos parecen más lejanos.
-        depth: 0.5 + Math.random() * 2.5,
-    });
+    stars.push(createStar());
 }
 
 const shipModel = {
@@ -175,21 +176,24 @@ function update(deltaTime) {
 
     for (const star of stars) {
         /**
-         * Profundidad simple:
+         * Movemos la estrella hacia la cámara.
          *
-         * Una estrella cercana debe moverse más rápido.
-         * Una estrella lejana debe moverse más lento.
-         *
-         * Por eso dividimos la velocidad entre depth.
+         * Menor z = más cerca.
+         * Mayor z = más lejos.
          */
-        star.x -= (ship.velocityX / star.depth) * deltaTime;
-        star.y -= (ship.velocityY / star.depth) * deltaTime;
+        star.z -= 200 * deltaTime;
 
-        if (star.x < 0) star.x = screen.width();
-        if (star.x > screen.width()) star.x = 0;
+        /**
+         * Cuando la estrella pasa "demasiado cerca",
+         * la reciclamos al fondo.
+         */
+        if (star.z <= 1) {
+            const newStar = createStar();
 
-        if (star.y < 0) star.y = screen.height();
-        if (star.y > screen.height()) star.y = 0;
+            star.x = newStar.x;
+            star.y = newStar.y;
+            star.z = STAR_DEPTH;
+        }
     }
 
     // Rotación 3D de la pirámide
@@ -217,9 +221,16 @@ function render() {
      */
 
     for (const star of stars) {
-        const size = 3 / star.depth;
+        const projected = projectPoint(
+            star,
+            screen.width() / 2,
+            screen.height() / 2,
+            300
+        );
 
-        renderer.drawPoint(star.x, star.y, size);
+        const size = Math.max(1, 4 * (1 - star.z / STAR_DEPTH));
+
+        renderer.drawPoint(projected.x, projected.y, size);
     }
 
     const projectedPoints = pyramidModel3D.points.map((point) => {
